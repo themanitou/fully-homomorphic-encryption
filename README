@@ -22,4 +22,4 @@ make
 RUN
 
 cd var
-./run.sh
+./run.sh  # by default the program will run 200 recryptions and measure the average time of each, this may take an hour on a single PC
