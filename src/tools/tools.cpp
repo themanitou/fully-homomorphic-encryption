@@ -12,6 +12,7 @@
  *
  *******************************************************************/
 
+#include <stdexcept>
 
 #include "../include/tools.h"
 
@@ -30,7 +31,7 @@ string convBase (const unsigned long& x, const long& base) {
   v = x;
 
   if((base < 2) || (base > 16))
-    result = "[convBase] Error: base out of range.";
+    throw std::invalid_argument("[" + std::string(__FUNCTION__) + "] Error: base out of range.");
   else
     do {
       result = digits[v % base] + result;

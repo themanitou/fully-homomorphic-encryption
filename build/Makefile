@@ -16,9 +16,8 @@ ifndef $(CC)
 CC=g++
 endif
 
-CPPFLAGS += -O2 -m64 -I/usr/local/ntl/include -I/usr/local/openmpi/include -DFHE_TEST -DFHE_MPI_LOG -std=c++11
-LDFLAGS  += -L/usr/local/ntl/lib -L/usr/local/openmpi/lib
-LIBS     += -lntl -lmpi_cxx -lmpi
+CPPFLAGS += -O2 -m64 -DFHE_TEST -DFHE_MPI_LOG -std=c++17 `pkg-config --cflags mpi-cxx`
+LIBS     += -lntl `pkg-config --libs mpi-cxx`
 
 -include src/tools/subdir.mk
 -include src/subdir.mk
@@ -33,6 +32,7 @@ all: ../bin/FullHomCrypt.out
 
 ../bin/FullHomCrypt.out: $(OBJS) $(USER_OBJS)
 	@echo 'Building file: $@'
+	mkdir -p ../bin
 	@echo 'Invoking: Cross GCC Linker'
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -o "$@" $(OBJS) $(LIBS)
 	@echo 'Finished building: $@'
