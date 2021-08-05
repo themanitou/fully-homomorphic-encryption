@@ -1,0 +1,7 @@
+bin
+build/src
+doc/papers
+src/GPATH
+src/GRTAGS
+src/GTAGS
+var/*.log
