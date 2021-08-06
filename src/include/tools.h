@@ -17,17 +17,32 @@
 #define TOOLS_H_
 
 
-#include <iostream>
 #include <string>
 
-using namespace std;
 
+namespace Fhe
+{
+    using namespace std;
 
 ////////////////////////////////////////////////////
 // Dang -- 2012-05-28
 //
 //    Function prototypes
 //
-string               convBase (const unsigned long&, const long&);
+    class Tools
+    {
+    public:
+        Tools(const Tools&) = delete;
+        Tools& operator=(const Tools&) = delete;
+
+        ~Tools();
+
+        static Tools& getInstance();
+        string convBase (const unsigned long&, const long&);
+
+    private:
+        Tools() = default;
+    };
+}
 
 #endif /* TOOLS_H_ */

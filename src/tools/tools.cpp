@@ -12,9 +12,14 @@
  *
  *******************************************************************/
 
+#include <iostream>
 #include <stdexcept>
 
 #include "../include/tools.h"
+
+
+namespace Fhe
+{
 
 
 //////////////////////////////////////////////////////
@@ -22,22 +27,50 @@
 // Function description:
 //       tbc...
 //
-string convBase (const unsigned long& x, const long& base) {
+    Tools::~Tools() = default;
 
-  string digits = "0123456789abcdef";
-  string result;
-  unsigned long v;
 
-  v = x;
-
-  if((base < 2) || (base > 16))
-    throw std::invalid_argument("[" + std::string(__FUNCTION__) + "] Error: base out of range.");
-  else
-    do {
-      result = digits[v % base] + result;
-      v /= base;
+//////////////////////////////////////////////////////
+// Dang -- 2012-05-28
+// Function description:
+//       tbc...
+//
+    Tools& Tools::getInstance()
+    {
+        static Tools tools;
+        return tools;
     }
-    while(v);
 
-  return result;
+
+//////////////////////////////////////////////////////
+// Dang -- 2012-05-28
+// Function description:
+//       tbc...
+//
+    string Tools::convBase (const unsigned long& x, const long& base)
+    {
+        string digits = "0123456789abcdef";
+        string result;
+        unsigned long v;
+
+        v = x;
+
+        if ((base < 2) || (base > 16))
+        {
+            throw std::invalid_argument("[" + std::string(__FUNCTION__) + "] Error: base out of range.");
+        }
+        else
+        {
+            do
+            {
+                result = digits[v % base] + result;
+                v /= base;
+            }
+            while(v);
+        }
+
+        return result;
+    }
+
+
 }
