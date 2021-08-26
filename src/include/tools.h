@@ -24,18 +24,13 @@ namespace Fhe
 {
     using namespace std;
 
-////////////////////////////////////////////////////
-// Dang -- 2012-05-28
-//
-//    Function prototypes
-//
     class Tools
     {
     public:
         Tools(const Tools&) = delete;
         Tools& operator=(const Tools&) = delete;
 
-        ~Tools();
+        ~Tools() = default;
 
         static Tools& getInstance();
         string convBase (const unsigned long&, const long&);

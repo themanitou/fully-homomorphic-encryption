@@ -13,6 +13,7 @@
  *******************************************************************/
 
 
+#include <mpi.h>
 #include "../include/fhe_mpi.h"
 #include "../include/fullhom.h"
 
