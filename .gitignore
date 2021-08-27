@@ -1,8 +1,8 @@
 bin
-build/src/**/*.d
-build/src/**/*.o
+build
 doc/papers
 src/GPATH
 src/GRTAGS
 src/GTAGS
+src/compile_commands.json
 var/*.log
