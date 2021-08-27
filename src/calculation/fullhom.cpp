@@ -14,10 +14,10 @@
 
 
 #include <sys/time.h>
-#include "../include/fhe_mpi.h"
-#include "../include/tools.h"
-#include "../include/multiplication.h"
-#include "../include/fullhom.h"
+#include "../communication/fhe_mpi.h"
+#include "tools.h"
+#include "multiplication.h"
+#include "fullhom.h"
 
 
 ////////////////////////////////////////////////////

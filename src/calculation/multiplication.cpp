@@ -13,8 +13,8 @@
  *******************************************************************/
 
 
-#include "../include/multiplication.h"
-#include "../include/fullhom.h"
+#include "multiplication.h"
+#include "fullhom.h"
 
 
 ////////////////////////////////////////////////////

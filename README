@@ -13,10 +13,13 @@ PREREQUISITE
 
 - NTL
 - OpenMPI
+- Qt5 (presumably installed at /usr/local/Qt-5.12 - update entry in src/CMakeLists.txt if needed)
 
 BUILD
 
+mkdir build
 cd build
+cmake ../src
 make
 
 RUN

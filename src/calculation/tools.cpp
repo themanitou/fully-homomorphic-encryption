@@ -15,7 +15,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "../include/tools.h"
+#include "tools.h"
 
 
 namespace Fhe

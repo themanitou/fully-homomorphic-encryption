@@ -16,7 +16,7 @@
 #ifndef FULLHOM_H_
 #define FULLHOM_H_
 
-#include "fhe_mpi.h"
+#include "../communication/fhe_mpi.h"
 
 #include <NTL/ZZ.h>
 #include <NTL/RR.h>

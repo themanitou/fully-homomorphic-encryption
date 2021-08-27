@@ -13,8 +13,8 @@
  *******************************************************************/
 
 
-#include "../include/fhe_mpi.h"
-#include "../include/fullhom.h"
+#include "fhe_mpi.h"
+#include "../calculation/fullhom.h"
 
 
 ////////////////////////////////////////////////////
