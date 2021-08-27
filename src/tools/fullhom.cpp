@@ -179,12 +179,12 @@ void Initialization (int argc, char* argv[]) {
 
   // set initial values
   LOG2_N = 9;
-  N = (1 << LOG2_N);
+  N = (1 << LOG2_N);  // N = 512: strong security and deeper bootstrapable capability
   MAX_BIT_LENTH = 380; // t-bit length coefficients
   MAX_RANDOM = power2_ZZ (MAX_BIT_LENTH);
   F = ZZX (N, 1) + ZZX (0, 1);  // F = X^N + 1
 
-  NOISE_MAGNITUDE_MIN = 15;  // based on the fact that N = 128,
+  NOISE_MAGNITUDE_MIN = 15;  // based on the fact that N = 512
   NOISE_MAGNITUDE_MAX = 20;  // NOISE_MAGNITUDE should
                              // change if N is different
 
