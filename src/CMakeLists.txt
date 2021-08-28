@@ -2,10 +2,14 @@ project(FULLHOMCRYPT)
 
 cmake_minimum_required(VERSION 3.3)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(FULLHOMCRYPT_VERSION 1.0.0)
 string(REGEX MATCH "^[0-9]+" FULLHOMCRYPT_SOVERSION ${FULLHOMCRYPT_VERSION})
 
-set(QTPATH /usr/local/Qt-5.12)
+set(QTPATH /home/ngu145/Workspace/git/workspace/Tools/ThirdParty)
 
 find_package(MPI)
 find_package(Qt5Core PATHS ${QTPATH})
