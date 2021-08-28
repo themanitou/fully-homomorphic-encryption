@@ -46,8 +46,8 @@ NTL_CLIENT
 typedef struct _noise_vector_t noise_vector_t, *noise_vector_pt;
 
 struct _noise_vector_t {
-  long count;
-  long *elements;
+    long count;
+    long *elements;
 };
 
 
@@ -125,8 +125,8 @@ long               GetIndex (long&, const long&, const long&);
 long               CompEtaAndXArray ();
 long               RecryptBit (ZZ&, const vec_ZZ&, const vec_ZZ&, const ZZ&);
 long               PostProcess (vec_ZZ&, vec_ZZ&, const ZZ&);
-long               SlavePostProcess ();
-long               SlaveRecrypt ();
+long               WorkerPostProcess ();
+long               WorkerRecrypt ();
 
 #ifdef FHE_DEBUG_LOG
 long               PrintAllVariables ();

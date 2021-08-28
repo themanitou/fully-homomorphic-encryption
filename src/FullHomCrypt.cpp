@@ -31,14 +31,14 @@ long validate_Eta () {
 
     for (k = 1; k <= SS_SIZE; k++) {
         i1 = idxArray[k-1];
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Eta] idxArray[" << (k-1) << "]=" << i1 << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Eta] idxArray[" << (k-1) << "]=" << i1 << endl;
         for (a = 1; a <= A_MAX; a++) {
             for (b = a+1; b <= IDX_MAX; b++) {
                 MulMod (cipherText, ETA(k, a), ETA(k, b), D);
                 DecryptBit (plainText, cipherText);
                 if (plainText) {
                     GetIndex (i2, a, b);
-                    cout << "[slave-" << FHE_MPI_RANK << ".validate_Eta] found for idxArray[" << (k-1) << "]::" << i2 << endl;
+                    cout << "[worker-" << FHE_MPI_RANK << ".validate_Eta] found for idxArray[" << (k-1) << "]::" << i2 << endl;
 
                     if (i2 != i1)
                         valid = 0;
@@ -48,9 +48,9 @@ long validate_Eta () {
     }
 
     if (valid)
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Eta] Success." << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Eta] Success." << endl;
     else
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Eta] Failed." << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Eta] Failed." << endl;
 
     return 0;
 }
@@ -78,12 +78,12 @@ long validate_Xarray () {
 
     SubMod (diff, S, sumX, D);
     if (IsZero (diff))
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Xarray]: Success." << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Xarray]: Success." << endl;
     else {
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Xarray]: Failed." << endl;
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Xarray] S = " << S << endl;
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Xarray] sumX = " << sumX << endl;
-        cout << "[slave-" << FHE_MPI_RANK << ".validate_Xarray] S - sumX = " << diff << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Xarray]: Failed." << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Xarray] S = " << S << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Xarray] sumX = " << sumX << endl;
+        cout << "[worker-" << FHE_MPI_RANK << ".validate_Xarray] S - sumX = " << diff << endl;
     }
 
     return 0;
@@ -886,8 +886,8 @@ int main (int argc, char *argv[]) {
 
     do {
 
-        // after initialization, master will interact with user, while slaves
-        // will wait for master's command
+        // after initialization, manager will interact with user, while workers
+        // will wait for manager's command
         if (FHE_MPI_RANK == 0) {
             cout << "[main] Fully Homomorphic Encryption Test:" << endl;
 
@@ -983,57 +983,57 @@ int main (int argc, char *argv[]) {
                 break;
 
             case 13:
-                // master sends command VAL_XARRAY to slaves
+                // manager sends command VAL_XARRAY to workers
                 for (i = 1; i < FHE_MPI_SIZE; i++)
                     FHE_MPI_Send_Command (FHE_MPI_COMMAND_VAL_XARRAY, i);
                 break;
 
             case 14:
-                // master sends command VAL_ETA to slaves
+                // manager sends command VAL_ETA to workers
                 for (i = 1; i < FHE_MPI_SIZE; i++)
                     FHE_MPI_Send_Command (FHE_MPI_COMMAND_VAL_ETA, i);
                 break;
 
             case 15:
-                // master sends command RE-INITIALIZATION
-                // upon receiving this command, slaves will get ready to receive
+                // manager sends command RE-INITIALIZATION
+                // upon receiving this command, workers will get ready to receive
                 // new domain parameters
                 for (i = 1; i < FHE_MPI_SIZE; i++)
                     FHE_MPI_Send_Command (FHE_MPI_COMMAND_INITIALIZATION, i);
 
-                // master generates new domain parameters and send them to slaves
+                // manager generates new domain parameters and send them to workers
                 FHE_Initialization ();
                 break;
 
             case 0:
-                // master sends command EXIT
+                // manager sends command EXIT
                 for (i = 1; i < FHE_MPI_SIZE; i++)
                     FHE_MPI_Send_Command (FHE_MPI_COMMAND_EXIT, i);
 
             }
 
-        } // end master
+        } // end manager
 
-        else { // slave
+        else { // worker
 
 #ifdef FHE_MPI_LOG
-            cout << "[slave-" << FHE_MPI_RANK << ".main] waiting for command..." << endl;
+            cout << "[worker-" << FHE_MPI_RANK << ".main] waiting for command..." << endl;
 #endif
 
             FHE_MPI_Recv_Command (choice, i);
 
 #ifdef FHE_MPI_LOG
-            cout << "[slave-" << FHE_MPI_RANK << ".main] recv command " << choice << endl;
+            cout << "[worker-" << FHE_MPI_RANK << ".main] recv command " << choice << endl;
 #endif
 
             switch (choice) {
 
             case FHE_MPI_COMMAND_POSTPROCESS: // post-process a ciphertext
-                SlavePostProcess ();
+                WorkerPostProcess ();
                 break;
 
             case FHE_MPI_COMMAND_RECRYPT: // post-process a ciphertext
-                SlaveRecrypt ();
+                WorkerRecrypt ();
                 break;
 
             case FHE_MPI_COMMAND_INITIALIZATION: // re-init, receive new domain params
