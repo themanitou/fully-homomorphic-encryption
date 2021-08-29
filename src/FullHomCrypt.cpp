@@ -13,6 +13,7 @@
  *******************************************************************/
 
 #include <QCoreApplication>
+#include <csignal>
 
 #include "calculation/fullhom.h"
 #include "jobmanager.h"
@@ -873,6 +874,16 @@ long validate_KeyGen_NaifKeyGen () {
 }
 
 
+//
+//
+//
+void sigHandler(int s)
+{
+    std::signal(s, SIG_DFL);
+    qApp->quit();
+}
+
+
 //////////////////////////////////////////////////////
 // Dang -- 2012-01-31
 // Function description:
@@ -1016,9 +1027,14 @@ int main (int argc, char *argv[]) {
             */
 
             QCoreApplication app(argc, argv);
+
+            std::signal(SIGINT,  sigHandler);
+            std::signal(SIGTERM, sigHandler);
+
             int exitCode = 0;
             {
                 Fhe::JobManager jobManager;
+                jobManager.setParent(&app);
                 exitCode = app.exec();
             }
 

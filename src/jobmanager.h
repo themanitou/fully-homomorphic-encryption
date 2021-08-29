@@ -44,7 +44,7 @@ namespace Fhe
         ~JobManager() override;
 
     private:
-        void sendResult(QUuid uuid, bool ok, int data = 0);
+        void sendResult(QUuid uuid, bool ok, QString data = QString());
 
     private slots:
         void jobReceived(QByteArray jobMessage);

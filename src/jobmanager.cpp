@@ -36,7 +36,7 @@ namespace Fhe
     }
 
 
-    void JobManager::sendResult(QUuid uuid, bool ok, int data)
+    void JobManager::sendResult(QUuid uuid, bool ok, QString data)
     {
         QByteArray result;
         QDataStream out(&result, QIODevice::WriteOnly);
@@ -75,7 +75,7 @@ namespace Fhe
             ZZ ciphertext = zzMap_[bitId];
             DecryptBit(bit, ciphertext);
 
-            sendResult(opId, true, bit);
+            sendResult(opId, true, QString::number(bit));
         }
     }
 
