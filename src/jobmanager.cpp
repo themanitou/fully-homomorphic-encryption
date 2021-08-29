@@ -77,6 +77,29 @@ namespace Fhe
 
             sendResult(opId, true, QString::number(bit));
         }
+        else if (jobId == "Encrypt Byte")
+        {
+            QUuid byteId;
+            int byte;
+            in >> byteId >> byte;
+
+            vec_ZZ ciphertext;
+            EncryptByte(ciphertext, byte);
+            vecZZMap_[byteId] = ciphertext;
+
+            sendResult(opId, true);
+        }
+        else if (jobId == "Decrypt Byte")
+        {
+            QUuid byteId;
+            long byte;
+            in >> byteId;
+
+            vec_ZZ ciphertext = vecZZMap_[byteId];
+            DecryptByte(byte, ciphertext);
+
+            sendResult(opId, true, QString::number(byte));
+        }
     }
 
 
