@@ -157,13 +157,4 @@ bool CommServer::broadcast(const QByteArray& message)
 }
 
 
-///
-/// \brief send message to all connected clients
-///
-bool CommServer::broadcast(const QString& message)
-{
-    QByteArray data(message.toUtf8());
-    return broadcast(data);
-}
-
 } // namespace Fhe

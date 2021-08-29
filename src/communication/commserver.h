@@ -41,7 +41,6 @@ public:
     ~CommServer() override;
 
     bool broadcast(const QByteArray& message);
-    bool broadcast(const QString& message);
 
 signals:
     void onMessageReceived(QByteArray message);

@@ -27,6 +27,7 @@ set(FULLHOMCRYPT_HEADERS
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/fhe_mpi.h
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/commserver.h
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/commclient.h
+  ${FULLHOMCRYPT_SOURCE_DIR}/jobmanager.h
 )
 
 set(FULLHOMCRYPT_SOURCES
@@ -36,6 +37,7 @@ set(FULLHOMCRYPT_SOURCES
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/fhe_mpi.cpp
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/commserver.cpp
   ${FULLHOMCRYPT_SOURCE_DIR}/communication/commclient.cpp
+  ${FULLHOMCRYPT_SOURCE_DIR}/jobmanager.cpp
   ${FULLHOMCRYPT_SOURCE_DIR}/FullHomCrypt.cpp
 )
 

@@ -12,7 +12,10 @@
  *
  *******************************************************************/
 
+#include <QCoreApplication>
+
 #include "calculation/fullhom.h"
+#include "jobmanager.h"
 
 
 //////////////////////////////////////////////////////
@@ -889,6 +892,7 @@ int main (int argc, char *argv[]) {
         // after initialization, manager will interact with user, while workers
         // will wait for manager's command
         if (FHE_MPI_RANK == 0) {
+            /*
             cout << "[main] Fully Homomorphic Encryption Test:" << endl;
 
             cout << "[main] 1 - KeyGen & NaifKeyGen." << endl;
@@ -920,15 +924,14 @@ int main (int argc, char *argv[]) {
             cout << "[main] Test #" << flush;
             cin >> choice;
 
-            /*
-            if (count < 200)
-                if (choice == 12)
-                    choice = 15;
-                else
-                    choice = 12;
-            else
-                choice = 0;
-            */
+            //if (count < 200)
+            //    if (choice == 12)
+            //        choice = 15;
+            //    else
+            //        choice = 12;
+            //else
+            //    choice = 0;
+
             cout << count << "." << choice << endl;
             count++;
 
@@ -1009,8 +1012,23 @@ int main (int argc, char *argv[]) {
                 // manager sends command EXIT
                 for (i = 1; i < FHE_MPI_SIZE; i++)
                     FHE_MPI_Send_Command (FHE_MPI_COMMAND_EXIT, i);
-
             }
+            */
+
+            QCoreApplication app(argc, argv);
+            int exitCode = 0;
+            {
+                Fhe::JobManager jobManager;
+                exitCode = app.exec();
+            }
+
+            // manager sends command EXIT
+            for (i = 1; i < FHE_MPI_SIZE; ++i)
+            {
+                FHE_MPI_Send_Command (FHE_MPI_COMMAND_EXIT, i);
+            }
+
+            return exitCode;
 
         } // end manager
 
