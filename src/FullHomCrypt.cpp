@@ -903,129 +903,6 @@ int main (int argc, char *argv[]) {
         // after initialization, manager will interact with user, while workers
         // will wait for manager's command
         if (FHE_MPI_RANK == 0) {
-            /*
-            cout << "[main] Fully Homomorphic Encryption Test:" << endl;
-
-            cout << "[main] 1 - KeyGen & NaifKeyGen." << endl;
-            cout << "[main] 2 - NoiseGen." << endl << endl;
-
-            cout << "[main] 3 - EncryptBit & DecryptBit." << endl;
-            cout << "[main] 4 - EncryptByte & DecryptByte." << endl << endl;
-
-            cout << "[main] 5 - FlipBit." << endl;
-            cout << "[main] 6 - XorBit." << endl << endl;
-
-            cout << "[main] 7 - NegByte." << endl;
-            cout << "[main] 8 - AddByte & SubByte." << endl << endl;
-
-            cout << "[main] 9 - MaxMinSignedByte." << endl << endl;
-
-            cout << "[main] 10 - Grade-school 4-bit Multiplication." << endl;
-            cout << "[main] 11 - Flat 4-bit Multiplication." << endl << endl;
-
-            cout << "[main] 12 - RecryptBit." << endl << endl;
-
-            cout << "[main] 13 - X_ARRAY." << endl;
-            cout << "[main] 14 - Eta." << endl << endl;
-
-            cout << "[main] 15 - Re-initialization." << endl << endl;
-
-            cout << "[main] 0 - Quit." << endl << endl;
-
-            cout << "[main] Test #" << flush;
-            cin >> choice;
-
-            //if (count < 200)
-            //    if (choice == 12)
-            //        choice = 15;
-            //    else
-            //        choice = 12;
-            //else
-            //    choice = 0;
-
-            cout << count << "." << choice << endl;
-            count++;
-
-            switch (choice) {
-
-            case 1:
-                validate_KeyGen_NaifKeyGen ();
-                break;
-
-            case 2:
-                validate_NoiseGen ();
-                break;
-
-            case 3:
-                validate_EncryptBit_DecryptBit ();
-                break;
-
-            case 4:
-                validate_EncryptByte_DecryptByte ();
-                break;
-
-            case 5:
-                validate_FlipBit ();
-                break;
-
-            case 6:
-                validate_XorBit ();
-                break;
-
-            case 7:
-                validate_NegByte ();
-                break;
-
-            case 8:
-                validate_AddByte_SubByte ();
-                break;
-
-            case 9:
-                validate_MaxMinSignedByte ();
-                break;
-
-            case 10:
-                validate_MulByte ();
-                break;
-
-            case 11:
-                validate_MulHalfByte ();
-                break;
-
-            case 12:
-                validate_RecryptBit ();
-                break;
-
-            case 13:
-                // manager sends command VAL_XARRAY to workers
-                for (i = 1; i < FHE_MPI_SIZE; i++)
-                    FHE_MPI_Send_Command (FHE_MPI_COMMAND_VAL_XARRAY, i);
-                break;
-
-            case 14:
-                // manager sends command VAL_ETA to workers
-                for (i = 1; i < FHE_MPI_SIZE; i++)
-                    FHE_MPI_Send_Command (FHE_MPI_COMMAND_VAL_ETA, i);
-                break;
-
-            case 15:
-                // manager sends command RE-INITIALIZATION
-                // upon receiving this command, workers will get ready to receive
-                // new domain parameters
-                for (i = 1; i < FHE_MPI_SIZE; i++)
-                    FHE_MPI_Send_Command (FHE_MPI_COMMAND_INITIALIZATION, i);
-
-                // manager generates new domain parameters and send them to workers
-                FHE_Initialization ();
-                break;
-
-            case 0:
-                // manager sends command EXIT
-                for (i = 1; i < FHE_MPI_SIZE; i++)
-                    FHE_MPI_Send_Command (FHE_MPI_COMMAND_EXIT, i);
-            }
-            */
-
             QCoreApplication app(argc, argv);
 
             std::signal(SIGINT,  sigHandler);
@@ -1034,7 +911,6 @@ int main (int argc, char *argv[]) {
             int exitCode = 0;
             {
                 Fhe::JobManager jobManager;
-                jobManager.setParent(&app);
                 exitCode = app.exec();
             }
 
