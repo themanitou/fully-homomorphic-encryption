@@ -105,7 +105,7 @@ namespace Fhe
             long word;
             in >> wordId;
 
-            long ret = DecryptByte(word, vecZZMap_[wordId]);
+            long ret = DecryptWord(word, vecZZMap_[wordId]);
 
             sendResult(opId, ret == 0, QString::number(word));
         }
