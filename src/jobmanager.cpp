@@ -73,8 +73,7 @@ namespace Fhe
             long bit;
             in >> bitId;
 
-            ZZ ciphertext = zzMap_[bitId];
-            long ret = DecryptBit(bit, ciphertext);
+            long ret = DecryptBit(bit, zzMap_[bitId]);
 
             sendResult(opId, ret == 0, QString::number(bit));
         }
@@ -96,10 +95,19 @@ namespace Fhe
             long byte;
             in >> byteId;
 
-            vec_ZZ ciphertext = vecZZMap_[byteId];
-            long ret = DecryptByte(byte, ciphertext);
+            long ret = DecryptByte(byte, vecZZMap_[byteId]);
 
             sendResult(opId, ret == 0, QString::number(byte));
+        }
+        else if (jobId == "Decrypt Word")
+        {
+            QUuid wordId;
+            long word;
+            in >> wordId;
+
+            long ret = DecryptByte(word, vecZZMap_[wordId]);
+
+            sendResult(opId, ret == 0, QString::number(word));
         }
         else if (jobId == "And Bit")
         {
@@ -146,6 +154,58 @@ namespace Fhe
             ZZ choosenBit;
             long ret = ChooseBit(choosenBit, zzMap_[inBitIdChoice], zzMap_[inBitId1], zzMap_[inBitId2]);
             zzMap_[outBitId] = choosenBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Neg Byte")
+        {
+            QUuid inByteId;
+            QUuid outByteId;
+            in >> inByteId >> outByteId;
+
+            vec_ZZ negByte;
+            long ret = NegByte(negByte, vecZZMap_[inByteId]);
+            vecZZMap_[outByteId] = negByte;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Add Byte")
+        {
+            QUuid inByteId1, inByteId2;
+            QUuid outByteId, outCarrierBitId;
+            in >> inByteId1 >> inByteId2 >> outByteId >> outCarrierBitId;
+
+            vec_ZZ sumByte;
+            ZZ carrierBit;
+            long ret = AddByte(sumByte, carrierBit, vecZZMap_[inByteId1], vecZZMap_[inByteId2]);
+            vecZZMap_[outByteId] = sumByte;
+            zzMap_[outCarrierBitId] = carrierBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Sub Byte")
+        {
+            QUuid inByteId1, inByteId2;
+            QUuid outByteId, outCarrierBitId;
+            in >> inByteId1 >> inByteId2 >> outByteId >> outCarrierBitId;
+
+            vec_ZZ subByte;
+            ZZ carrierBit;
+            long ret = SubByte(subByte, carrierBit, vecZZMap_[inByteId1], vecZZMap_[inByteId2]);
+            vecZZMap_[outByteId] = subByte;
+            zzMap_[outCarrierBitId] = carrierBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Mult Byte")
+        {
+            QUuid inByteId1, inByteId2;
+            QUuid outByteId;
+            in >> inByteId1 >> inByteId2 >> outByteId;
+
+            vec_ZZ mulByte;
+            long ret = MulByte(mulByte, vecZZMap_[inByteId1], vecZZMap_[inByteId2]);
+            vecZZMap_[outByteId] = mulByte;
 
             sendResult(opId, ret == 0);
         }
