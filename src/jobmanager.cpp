@@ -61,10 +61,10 @@ namespace Fhe
             in >> bitId >> bit;
 
             ZZ ciphertext;
-            EncryptBit(ciphertext, bit);
+            long ret = EncryptBit(ciphertext, bit);
             zzMap_[bitId] = ciphertext;
 
-            sendResult(opId, true);
+            sendResult(opId, ret == 0);
         }
         else if (jobId == "Decrypt Bit")
         {
@@ -73,9 +73,9 @@ namespace Fhe
             in >> bitId;
 
             ZZ ciphertext = zzMap_[bitId];
-            DecryptBit(bit, ciphertext);
+            long ret = DecryptBit(bit, ciphertext);
 
-            sendResult(opId, true, QString::number(bit));
+            sendResult(opId, ret == 0, QString::number(bit));
         }
         else if (jobId == "Encrypt Byte")
         {
@@ -84,10 +84,10 @@ namespace Fhe
             in >> byteId >> byte;
 
             vec_ZZ ciphertext;
-            EncryptByte(ciphertext, byte);
+            long ret = EncryptByte(ciphertext, byte);
             vecZZMap_[byteId] = ciphertext;
 
-            sendResult(opId, true);
+            sendResult(opId, ret == 0);
         }
         else if (jobId == "Decrypt Byte")
         {
@@ -96,9 +96,57 @@ namespace Fhe
             in >> byteId;
 
             vec_ZZ ciphertext = vecZZMap_[byteId];
-            DecryptByte(byte, ciphertext);
+            long ret = DecryptByte(byte, ciphertext);
 
-            sendResult(opId, true, QString::number(byte));
+            sendResult(opId, ret == 0, QString::number(byte));
+        }
+        else if (jobId == "And Bit")
+        {
+            QUuid inBitId1, inBitId2;
+            QUuid outBitId;
+            in >> inBitId1 >> inBitId2 >> outBitId;
+
+            ZZ andBit;
+            long ret = AndBit(andBit, zzMap_[inBitId1], zzMap_[inBitId2]);
+            zzMap_[outBitId] = andBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Xor Bit")
+        {
+            QUuid inBitId1, inBitId2;
+            QUuid outBitId;
+            in >> inBitId1 >> inBitId2 >> outBitId;
+
+            ZZ xorBit;
+            long ret = XorBit(xorBit, zzMap_[inBitId1], zzMap_[inBitId2]);
+            zzMap_[outBitId] = xorBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Flip Bit")
+        {
+            QUuid inBitId;
+            QUuid outBitId;
+            in >> inBitId >> outBitId;
+
+            ZZ flipBit;
+            long ret = FlipBit(flipBit, zzMap_[inBitId]);
+            zzMap_[outBitId] = flipBit;
+
+            sendResult(opId, ret == 0);
+        }
+        else if (jobId == "Choose Bit")
+        {
+            QUuid inBitIdChoice, inBitId1, inBitId2;
+            QUuid outBitId;
+            in >> inBitIdChoice >> inBitId1 >> inBitId2 >> outBitId;
+
+            ZZ choosenBit;
+            long ret = ChooseBit(choosenBit, zzMap_[inBitIdChoice], zzMap_[inBitId1], zzMap_[inBitId2]);
+            zzMap_[outBitId] = choosenBit;
+
+            sendResult(opId, ret == 0);
         }
     }
 
