@@ -43,6 +43,7 @@ namespace Fhe
 
         out << uuid << ok << data;
         server_->broadcast(result);
+        qDebug() << "[sendResult] opId=" << uuid.toString() << ", result=" << ok << ", data=" << data;
     }
 
 
