@@ -221,6 +221,19 @@ namespace Fhe
 
             sendResult(opId, ret == 0);
         }
+        else if (jobId == "MaxMin Byte")
+        {
+            QUuid inByte1Id, inByte2Id;
+            QUuid outByteMaxId, outByteMinId;
+            in >> inByte1Id >> inByte2Id >> outByteMaxId >> outByteMinId;
+
+            vec_ZZ byteMaxId, byteMinId;
+            long ret = MaxMinSignedByte(byteMaxId, byteMinId, vecZZMap_[inByte1Id], vecZZMap_[inByte2Id]);
+            vecZZMap_[outByteMaxId] = byteMaxId;
+            vecZZMap_[outByteMinId] = byteMinId;
+
+            sendResult(opId, ret == 0);
+        }
     }
 
 
