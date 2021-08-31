@@ -117,12 +117,15 @@ long               MaxMinSignedByte (vec_ZZ&, vec_ZZ&, const vec_ZZ&, const vec_
 long               MulByte (vec_ZZ&, const vec_ZZ&, const vec_ZZ&);
 
 long               AddWord (vec_ZZ&, ZZ&, const vec_ZZ&, const vec_ZZ&);
+long               AddBitSequences (vec_ZZ&, ZZ&, const vec_ZZ&, const vec_ZZ&, long, long, long, long, long recryptEveryBits = 0);
 
+long               MulHalfByteAndRecrypt (vec_ZZ&, const vec_ZZ&, const vec_ZZ&, long, long);
 long               MulHalfByte (vec_ZZ&, const vec_ZZ&, const vec_ZZ&);
 long               BuildMulBit (vec_ZZ&, const vec_ZZ&);
 
 long               GetIndex (long&, const long&, const long&);
 long               CompEtaAndXArray ();
+long               RecryptBitHelper (ZZ&, const ZZ&);
 long               RecryptBit (ZZ&, const vec_ZZ&, const vec_ZZ&, const ZZ&);
 long               PostProcess (vec_ZZ&, vec_ZZ&, const ZZ&);
 long               WorkerPostProcess ();

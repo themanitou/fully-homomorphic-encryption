@@ -1161,11 +1161,104 @@ long AddWord (vec_ZZ& result, ZZ& carry, const vec_ZZ& a, const vec_ZZ& b) {
 // Function description:
 //       tbc...
 //
-long MulByte (vec_ZZ& result, const vec_ZZ& a, const vec_ZZ& b) {
+long AddBitSequences (vec_ZZ& result, ZZ& carry, const vec_ZZ& a, const vec_ZZ& b, long startRes, long startA, long startB, long length, long recryptEveryBits) {
 
+    if (a.length () < (length + startA) || b.length () < (length + startB) || result.length() < (length + startRes)) {
+        // Error, ciphertext invalid
+        cout << "[AddWord] Error, invalid ciphertext." << endl;
+        return 1;
+    }
+
+    ZZ c;
+    c = 0;
+
+    for (long i = 0; i < length; ++i) {
+
+        long posA = startA + i;
+        long posB = startB + i;
+
+        ZZ  t0, t1, t2, t3;
+
+        XorBit (t0, a[posA], b[posB]);
+        XorBit (t0, t0, c);
+
+        AndBit (t1, a[posA], b[posB]);
+        AndBit (t2, a[posA], c);
+        AndBit (t3, b[posB], c);
+
+        result[startRes + i] = t0;
+
+        XorBit (c, t1, t2);
+        XorBit (c, c, t3);
+
+        if ((recryptEveryBits > 0) && (((i + 1) % recryptEveryBits) == 0))
+        {
+            RecryptBitHelper (c, c);
+        }
+    }
+
+    carry = c;
+
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////
+// Dang -- 2012-02-24
+// Function description:
+//       tbc...
+//
+long MulHalfByteAndRecrypt (vec_ZZ& result, const vec_ZZ& a, const vec_ZZ& b, long startA, long startB)
+{
     vec_ZZ c;
     ZZ carry;
-    long i, j;
+
+    if (a.length () != 8 || b.length () != 8) {
+        // Error, ciphertext invalid
+        cout << "[MulHalfByteAndRecrypt] Error, invalid ciphertext." << endl;
+        return 1;
+    }
+
+    c.SetLength (4);
+    clear (result);
+    result.SetLength (8);
+
+    long endA = startA + 4;
+    long endB = startB + 4;
+    long posRes = 0;
+    for (long i = startB; i < endB; ++i)
+    {
+        long posC = 0;
+        ZZ bi;
+        bi = b[i];
+
+        for (long j = startA; j < endA; ++j)
+        {
+            AndBit (c[posC], bi, a[j]);
+            ++posC;
+        }
+
+        AddBitSequences (result, carry, result, c, posRes, posRes, 0, 4);
+        result[posRes + 4] = carry;
+
+        ++posRes;
+    }
+
+    for (int k = 0; k < 8; ++k)
+    {
+        RecryptBitHelper (result[k], result[k]);
+    }
+
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////
+// Dang -- 2012-02-24
+// Function description:
+//       tbc...
+//
+long MulByte (vec_ZZ& result, const vec_ZZ& a, const vec_ZZ& b) {
 
     if (a.length () != 8 || b.length () != 8) {
         // Error, ciphertext invalid
@@ -1173,20 +1266,35 @@ long MulByte (vec_ZZ& result, const vec_ZZ& a, const vec_ZZ& b) {
         return 1;
     }
 
-    c.SetLength (16);
     result.SetLength (16);
     clear (result);
 
-    for (i = 0; i < 4; i++) {
-
-        clear (c);
-
-        for (j = 0; j < 4; j++)
-            AndBit (c[i+j], b[i], a[j]);
-
-        AddWord (result, carry, result, c);
-        result[i + 8] = carry;
+    vec_ZZ byte1;
+    MulHalfByteAndRecrypt(byte1, a, b, 0, 0);
+    for (int k = 0; k < 8; ++k)
+    {
+        result[k] = byte1[k];
     }
+
+    ZZ carry1;
+    vec_ZZ byte2;
+    MulHalfByteAndRecrypt(byte2, a, b, 0, 4);
+    AddBitSequences(result, carry1, result, byte2, 4, 4, 0, 8, 1);
+
+    ZZ carry2;
+    vec_ZZ byte3;
+    MulHalfByteAndRecrypt(byte3, a, b, 4, 0);
+    AddBitSequences(result, carry2, result, byte3, 4, 4, 0, 8, 1);
+
+    XorBit(result[12], carry1, carry2);
+    RecryptBitHelper(result[12], result[12]);
+    AndBit(result[13], carry1, carry2);
+    RecryptBitHelper(result[13], result[13]);
+
+    ZZ carry3;
+    vec_ZZ byte4;
+    MulHalfByteAndRecrypt(byte4, a, b, 4, 4);
+    AddBitSequences(result, carry3, result, byte4, 8, 8, 0, 8, 1);
 
     return 0;
 }
@@ -1881,6 +1989,20 @@ long WorkerRecrypt () {
 #ifdef FHE_MPI_LOG
     cout << "[worker-" << FHE_MPI_RANK << ".WorkerRecrypt] Ending post process." << endl;
 #endif
+
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////
+// Dang -- 2012-05-24
+// Function description:
+//       tbc...
+//
+long RecryptBitHelper (ZZ& result, const ZZ& aCipher) {
+    vec_ZZ y_array, z_array;
+    PostProcess (y_array, z_array, aCipher);
+    RecryptBit (result, y_array, z_array, aCipher);
 
     return 0;
 }
