@@ -209,6 +209,18 @@ namespace Fhe
 
             sendResult(opId, ret == 0);
         }
+        else if (jobId == "Recrypt Bit")
+        {
+            QUuid inBitId;
+            QUuid outBitId;
+            in >> inBitId >> outBitId;
+
+            ZZ recryptBit;
+            long ret = RecryptBitHelper(recryptBit, zzMap_[inBitId]);
+            zzMap_[outBitId] = recryptBit;
+
+            sendResult(opId, ret == 0);
+        }
     }
 
 
