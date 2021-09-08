@@ -14,4 +14,4 @@
 
 
 #!/bin/sh
-let NP=`grep -c "^processor" /proc/cpuinfo`-1 && mpirun --np ${NP} --use-hwthread-cpus ../bin/fullhomcrypt
+NP=`grep -c "^processor" /proc/cpuinfo`-1 && mpirun --np ${NP} --use-hwthread-cpus ../bin/fullhomcrypt
